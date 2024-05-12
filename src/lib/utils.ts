@@ -61,7 +61,7 @@ export function constructMetadata({
       ],
     },
     icons,
-    metadataBase: new URL("https://transcribot.vercel.app"),
+    metadataBase: new URL("https://snippy-orpin.vercel.app"),
     themeColor: "#FFF",
     ...(noIndex && {
       robots: {
