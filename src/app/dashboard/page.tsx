@@ -20,8 +20,6 @@ const Page = async () => {
   return (
     <Dashboard
       userId={dbUser.id}
-      name={dbUser.name}
-      picture={dbUser.picture}
     />
   );
 };
