@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id      String  @id @unique // matches Kinde user id
+  email   String  @unique
+  picture String?
+  name    String?
+
+  snippets      Snippet[]
+  savedSnippets SavedSnippet[]
+}
+
+enum SnippetVisibility {
+  public
+  private
+}
+
+model Snippet {
+  id         String            @id @default(cuid())
+  code       String
+  language   String
+  name       String
+  visibility SnippetVisibility @default(public)
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  savedSnippets SavedSnippet[]
+}
+
+model SavedSnippet {
+  id        String  @id @default(cuid())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+  snippet   Snippet @relation(fields: [snippetId], references: [id])
+  snippetId String
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, snippetId])
+}
