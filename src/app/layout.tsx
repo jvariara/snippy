@@ -4,13 +4,14 @@ import "./globals.css";
 import { cn, constructMetadata } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import Providers from "@/components/Providers";
-import { Toaster } from "sonner"
+import { Toaster } from "sonner";
 
-import "react-loading-skeleton/dist/skeleton.css"
+import "react-loading-skeleton/dist/skeleton.css";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = constructMetadata()
+export const metadata: Metadata = constructMetadata();
 
 export default function RootLayout({
   children,
@@ -26,9 +27,11 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <Toaster richColors position="bottom-right" />
-          <Navbar />
-          {children}
+          <Suspense>
+            <Toaster richColors position="bottom-right" />
+            <Navbar />
+            {children}
+          </Suspense>
         </Providers>
       </body>
     </html>

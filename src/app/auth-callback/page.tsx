@@ -4,7 +4,7 @@ import { trpc } from "../_trpc/client";
 import { Loader2 } from "lucide-react";
 import React from "react";
 
-const Page = () => {
+const AuthCallbackLoading = () => {
   const router = useRouter();
 
   const searchParams = useSearchParams();
@@ -35,4 +35,10 @@ const Page = () => {
   );
 };
 
-export default Page;
+const AuthCallbackPage = () => {
+  <React.Suspense>
+    <AuthCallbackLoading />
+  </React.Suspense>
+}
+
+export default AuthCallbackLoading;
