@@ -120,7 +120,7 @@ const EditSnippet = ({ loggedInUserId, snippetId }: EditSnippetProps) => {
                     <FormItem className="w-1/2 sm:w-[200px]">
                       <FormLabel>Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Name" {...field} />
+                        <Input placeholder="Name" defaultValue={snippet.name} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -163,7 +163,7 @@ const EditSnippet = ({ loggedInUserId, snippetId }: EditSnippetProps) => {
                     <FormItem className="w-1/2 sm:w-[200px]">
                       <FormLabel>Visibility</FormLabel>
                       <Select
-                        defaultValue="public"
+                        defaultValue={snippet.visibility}
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger className="w-full sm:w-[200px]">

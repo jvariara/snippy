@@ -65,7 +65,8 @@ const Dashboard = ({ userId }: DashboardProps) => {
     },
     {
       getNextPageParam: (lastPage) => lastPage?.nextCursor,
-      refetchOnMount: true
+      refetchOnMount: true,
+      refetchOnWindowFocus: true
     }
   );
 
