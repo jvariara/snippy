@@ -1,6 +1,5 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
-import { LANGUAGES, TLanguages } from "@/constants";
 import {
   TVisibility,
   UpdateSnippetValidation,
@@ -9,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Editor } from "@monaco-editor/react";
 import { Loader2 } from "lucide-react";
 import { notFound, redirect, useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -34,6 +33,7 @@ import {
 } from "./ui/select";
 import { Skeleton } from "./ui/skeleton";
 import { Label } from "./ui/label";
+import { LANGUAGES } from "@/constants";
 
 interface EditSnippetProps {
   loggedInUserId: string;
@@ -41,6 +41,9 @@ interface EditSnippetProps {
 }
 
 const EditSnippet = ({ loggedInUserId, snippetId }: EditSnippetProps) => {
+  const [name, setName] = useState("");
+  const [visibility, setVisibility] = useState("private");
+  const [code, setCode] = useState<string | undefined>("");
   const editorRef = useRef();
   const router = useRouter();
 
@@ -48,13 +51,11 @@ const EditSnippet = ({ loggedInUserId, snippetId }: EditSnippetProps) => {
     id: snippetId,
   });
 
-  let snippet;
+  let snippet = null;
   if (data && data.success) snippet = data?.snippet;
 
   if (snippet?.visibility === "private" && snippet.userId !== loggedInUserId)
     redirect("/dashboard");
-
-  const [code, setCode] = useState<string | undefined>(snippet?.code);
 
   const onMount = (editor: any) => {
     editorRef.current = editor;
@@ -66,7 +67,6 @@ const EditSnippet = ({ loggedInUserId, snippetId }: EditSnippetProps) => {
       toast.success(
         `Code Snippet ${updatedSnippet.name} successfully updated!`
       );
-      router.push("/dashboard");
     },
     onError: (err) => {
       if (err?.data?.code === "UNAUTHORIZED") {
@@ -85,20 +85,42 @@ const EditSnippet = ({ loggedInUserId, snippetId }: EditSnippetProps) => {
     },
   });
 
-  const onSubmit = async (
-    updatedSnippet: z.infer<typeof UpdateSnippetValidation>
-  ) => {
-    updateSnippet({ id: snippetId, data: updatedSnippet });
+  const onVisibilitySelect = (visibility: string) => {
+    setVisibility(visibility);
   };
 
-  const form = useForm({
-    resolver: zodResolver(UpdateSnippetValidation),
-    defaultValues: {
-      code: snippet?.code || "",
-      name: snippet?.name || "",
-      visibility: snippet?.visibility as TVisibility,
-    },
-  });
+  useEffect(() => {
+    if (snippet) {
+      setName(snippet.name);
+      setVisibility(snippet.visibility);
+      setCode(snippet.code);
+    }
+  }, [snippet]);
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // updateSnippet({ id: snippetId, data: updatedSnippet });
+    const {
+      code: updatedCode,
+      name: updatedName,
+      visibility: updatedVisibility,
+    } = UpdateSnippetValidation.parse({
+      code,
+      name,
+      visibility,
+    });
+
+    const updatedSnippet = {
+      code: updatedCode,
+      name: updatedName,
+      visibility: updatedVisibility,
+    };
+
+    updateSnippet({
+      id: snippetId,
+      data: updatedSnippet,
+    });
+  };
 
   if (isLoading) return <EditSnippetPlaceholder />;
 
@@ -107,102 +129,75 @@ const EditSnippet = ({ loggedInUserId, snippetId }: EditSnippetProps) => {
   if (snippet.userId !== loggedInUserId) redirect("/");
 
   if (!isLoading && snippet) {
-    console.log(snippet);
     return (
       <div className="p-2.5 sm:p-0">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="flex flex-col sm:flex-row sm:justify-between gap-y-3 sm:gap-y-0 items-end">
-              <div className="flex gap-x-2 sm:gap-x-4 w-full">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem className="w-1/2 sm:w-[200px]">
-                      <FormLabel>Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder={snippet.name} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="flex flex-col space-y-3 justify-end">
-                  <Label>Language</Label>
-                  <Select defaultValue={snippet?.language} disabled>
-                    <SelectTrigger className="w-full sm:w-[200px]">
-                      <SelectValue placeholder="Select a language" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Languages</SelectLabel>
-                        <SelectItem value={snippet.language}>
-                          {/* @ts-ignore */}
-                          {LANGUAGES[snippet.language]}
-                        </SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <FormField
-                  control={form.control}
-                  name="visibility"
-                  render={({ field }) => (
-                    <FormItem className="w-1/2 sm:w-[200px]">
-                      <FormLabel>Visibility</FormLabel>
-                      <Select
-                        defaultValue={snippet.visibility}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger className="w-full sm:w-[200px]">
-                          <SelectValue placeholder="Select a language" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Visibility</SelectLabel>
-                            <SelectItem value="public">Public</SelectItem>
-                            <SelectItem value="private">Private</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormItem>
-                  )}
+        <form onSubmit={(e) => onSubmit(e)}>
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-y-3 sm:gap-y-0 items-end">
+            <div className="flex gap-x-2 sm:gap-x-4 w-full">
+              <div className="w-1/2 sm:w-[200px] space-y-3">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  id="name"
+                  value={name}
+                  type="text"
+                  onChange={(e) => setName(e.target.value)}
                 />
               </div>
-              <Button
-                type="submit"
-                className="w-full sm:w-fit flex items-center"
-                disabled={isPending}
-              >
-                {isPending && (
-                  <Loader2 className="w-4 h-4 mr-1.5 animate-spin text-gray-200" />
-                )}
-                {isPending ? "Saving..." : "Save"}
-              </Button>
+              <div className="w-1/2 sm:w-[200px] space-y-3">
+                <Label htmlFor="language">Language</Label>
+                <Input
+                  id="language"
+                  disabled
+                  // @ts-ignore
+                  value={LANGUAGES[snippet.language]}
+                />
+              </div>
+              <div className="w-1/2 sm:w-[200px] space-y-3">
+                <Label htmlFor="visibility">Visibility</Label>
+                <Select
+                  defaultValue={snippet.visibility}
+                  onValueChange={(e) => onVisibilitySelect(e)}
+                >
+                  <SelectTrigger className="w-full sm:w-[200px]">
+                    <SelectValue
+                      id="visibility"
+                      placeholder="Select a language"
+                    />
+                  </SelectTrigger>
+                  <SelectContent id="visibility">
+                    <SelectGroup>
+                      <SelectLabel>Visibility</SelectLabel>
+                      <SelectItem value="public">Public</SelectItem>
+                      <SelectItem value="private">Private</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            <div className="p-2 rounded-xl ring-1 ring-inset bg-gray-900/5 ring-gray-900/10 lg:rounded-2xl mt-4 lg:p-4">
-              <FormField
-                control={form.control}
-                name="code"
-                render={({ field }) => (
-                  <Editor
-                    height="75vh"
-                    language={snippet.language}
-                    defaultValue={snippet.code}
-                    value={code}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      setCode(e);
-                    }}
-                    onMount={onMount}
-                  />
-                )}
-              />
-            </div>
-          </form>
-        </Form>
+            <Button
+              type="submit"
+              className="w-full sm:w-fit flex items-center"
+              disabled={isPending}
+            >
+              {isPending && (
+                <Loader2 className="w-4 h-4 mr-1.5 animate-spin text-gray-200" />
+              )}
+              {isPending ? "Saving..." : "Save"}
+            </Button>
+          </div>
+          <div className="p-2 rounded-xl ring-1 ring-inset bg-gray-900/5 ring-gray-900/10 lg:rounded-2xl mt-4 lg:p-4">
+            <Editor
+              height="75vh"
+              language={snippet.language}
+              defaultValue={code}
+              value={code}
+              onChange={(e) => {
+                setCode(e);
+              }}
+              onMount={onMount}
+            />
+          </div>
+        </form>
       </div>
     );
   }

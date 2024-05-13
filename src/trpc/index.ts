@@ -194,7 +194,7 @@ export const appRouter = router({
         return { success: true, savedSnippet };
       }
     }),
-  getSnippetSaveCount: privateProcedure
+  getSnippetSaveCount: publicProcedure
     .input(z.object({ snippetId: z.string() }))
     .query(async ({ ctx, input }) => {
       return await db.savedSnippet.count({
