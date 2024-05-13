@@ -65,6 +65,7 @@ const Dashboard = ({ userId }: DashboardProps) => {
     },
     {
       getNextPageParam: (lastPage) => lastPage?.nextCursor,
+      refetchOnMount: true
     }
   );
 
@@ -177,7 +178,7 @@ const Dashboard = ({ userId }: DashboardProps) => {
                 }
               })}
             </ul>
-          ) : isLoading ? (
+          ) : isSavedSnippetLoading ? (
             <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               <Skeleton height={100} className="my-2 col-span-1" count={1} />
               <Skeleton height={100} className="my-2 col-span-1" count={1} />
