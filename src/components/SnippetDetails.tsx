@@ -9,6 +9,8 @@ import { formatSaveCount } from "@/lib/utils";
 import { LANGUAGES } from "@/constants";
 import { notFound, redirect } from "next/navigation";
 import { Skeleton } from "./ui/skeleton";
+import { Button } from "./ui/button";
+import { toast } from "sonner";
 
 interface SnippetDetailsProps {
   snippetId: string;
@@ -115,6 +117,15 @@ const SnippetDetails = ({ snippetId, loggedInUserId }: SnippetDetailsProps) => {
                 {format(new Date(snippet.createdAt), "MMM dd, yyyy")}
               </div>
             </div>
+            <Button
+              variant="outline"
+              onClick={() => {
+                navigator.clipboard.writeText(snippet.code);
+                toast("Code successfully saved to clipboard!")
+              }}
+            >
+              Copy Code
+            </Button>
           </div>
         </div>
       </div>
