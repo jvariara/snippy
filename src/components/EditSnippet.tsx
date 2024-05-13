@@ -1,6 +1,6 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
-import { TLanguages } from "@/constants";
+import { LANGUAGES, TLanguages } from "@/constants";
 import {
   TVisibility,
   UpdateSnippetValidation,
@@ -33,6 +33,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Skeleton } from "./ui/skeleton";
+import { Label } from "./ui/label";
 
 interface EditSnippetProps {
   loggedInUserId: string;
@@ -55,16 +56,6 @@ const EditSnippet = ({ loggedInUserId, snippetId }: EditSnippetProps) => {
 
   const [code, setCode] = useState<string | undefined>(snippet?.code);
 
-  const form = useForm({
-    resolver: zodResolver(UpdateSnippetValidation),
-    defaultValues: {
-      code: snippet?.code || "",
-      name: snippet?.name || "",
-      visibility: snippet?.visibility as TVisibility,
-      language: snippet?.language as TLanguages,
-    },
-  });
-
   const onMount = (editor: any) => {
     editorRef.current = editor;
     editor.focus();
@@ -79,7 +70,7 @@ const EditSnippet = ({ loggedInUserId, snippetId }: EditSnippetProps) => {
     },
     onError: (err) => {
       if (err?.data?.code === "UNAUTHORIZED") {
-        toast.error("You must be logged in to create a snippet.", {
+        toast.error("You must be logged in to edit a snippet.", {
           action: {
             label: "Sign in",
             onClick: () => router.push("/sign-in"),
@@ -88,7 +79,7 @@ const EditSnippet = ({ loggedInUserId, snippetId }: EditSnippetProps) => {
       } else {
         toast.error("Uh oh! Something went wrong", {
           description:
-            "There was an error trying to create a snippet. Please try again.",
+            "There was an error trying to edit your snippet. Please try again.",
         });
       }
     },
@@ -100,6 +91,15 @@ const EditSnippet = ({ loggedInUserId, snippetId }: EditSnippetProps) => {
     updateSnippet({ id: snippetId, data: updatedSnippet });
   };
 
+  const form = useForm({
+    resolver: zodResolver(UpdateSnippetValidation),
+    defaultValues: {
+      code: snippet?.code || "",
+      name: snippet?.name || "",
+      visibility: snippet?.visibility as TVisibility,
+    },
+  });
+
   if (isLoading) return <EditSnippetPlaceholder />;
 
   if (!snippet) return notFound();
@@ -107,6 +107,7 @@ const EditSnippet = ({ loggedInUserId, snippetId }: EditSnippetProps) => {
   if (snippet.userId !== loggedInUserId) redirect("/");
 
   if (!isLoading && snippet) {
+    console.log(snippet);
     return (
       <div className="p-2.5 sm:p-0">
         <Form {...form}>
@@ -120,42 +121,31 @@ const EditSnippet = ({ loggedInUserId, snippetId }: EditSnippetProps) => {
                     <FormItem className="w-1/2 sm:w-[200px]">
                       <FormLabel>Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Name" defaultValue={snippet.name} {...field} />
+                        <Input placeholder={snippet.name} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="language"
-                  render={({ field }) => (
-                    <FormItem className="w-1/2 sm:w-[200px]">
-                      <FormLabel>Language</FormLabel>
-                      <Select defaultValue={snippet?.language} disabled>
-                        <SelectTrigger className="w-full sm:w-[200px]">
-                          <SelectValue placeholder="Select a language" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Languages</SelectLabel>
-                            <SelectItem value="javascript">
-                              JavaScript
-                            </SelectItem>
-                            <SelectItem value="typescript">
-                              TypeScript
-                            </SelectItem>
-                            <SelectItem value="python">Python</SelectItem>
-                            <SelectItem value="csharp">C#</SelectItem>
-                            <SelectItem value="java">Java</SelectItem>
-                            <SelectItem value="php">PHP</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormItem>
-                  )}
-                />
+                <div className="flex flex-col space-y-3 justify-end">
+                  <Label>Language</Label>
+                  <Select defaultValue={snippet?.language} disabled>
+                    <SelectTrigger className="w-full sm:w-[200px]">
+                      <SelectValue placeholder="Select a language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Languages</SelectLabel>
+                        <SelectItem value={snippet.language}>
+                          {/* @ts-ignore */}
+                          {LANGUAGES[snippet.language]}
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <FormField
                   control={form.control}
                   name="visibility"
