@@ -276,11 +276,12 @@ export const appRouter = router({
       z.object({
         limit: z.number().min(1).max(100).nullish(),
         cursor: z.string().nullish(),
+        language: z.string().nullish()
       })
     )
     .query(async ({ ctx, input }) => {
       const { userId } = ctx;
-      const { cursor } = input;
+      const { cursor, language } = input;
       const limit = input.limit ?? INFINITE_QUERY_LIMIT;
 
       const snippets = await db.snippet.findMany({
@@ -289,6 +290,7 @@ export const appRouter = router({
           NOT: {
             userId,
           },
+          ...(language && language !== "all" ? { language } : {}),
         },
         orderBy: {
           createdAt: "desc",

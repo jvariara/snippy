@@ -1,13 +1,21 @@
+import { TVisibility } from "@/lib/validations/snippet";
+
 export const LANGUAGES = {
-  "javascript": "JavaScript",
-  "typescript": "TypeScript",
-  "python": "Python",
-  "csharp": "C#",
-  "java": "Java",
-  "php": "PHP"
+  javascript: "JavaScript",
+  typescript: "TypeScript",
+  python: "Python",
+  csharp: "C#",
+  java: "Java",
+  php: "PHP",
 };
 
-export type TLanguages = "javascript" | "typescript" | "python" | "csharp" | "java" | "php"
+export type TLanguages =
+  | "javascript"
+  | "typescript"
+  | "python"
+  | "csharp"
+  | "java"
+  | "php";
 
 export const CODE_SNIPPETS = {
   javascript: `// sample snippet\nfunction greet(name) {\n\tconsole.log("Hello, " + name + "!");\n}\n\ngreet("Alex");\n`,
@@ -19,4 +27,21 @@ export const CODE_SNIPPETS = {
   php: "//sample snippet\n<?php\n\n$name = 'Alex';\necho $name;\n",
 };
 
-export const INFINITE_QUERY_LIMIT = 9
+export const INFINITE_QUERY_LIMIT = 9;
+
+export type TSnippet = {
+  code: string;
+  userId: string;
+  user: {
+    picture: string | null;
+    id: string;
+    name: string | null;
+    email: string;
+  };
+  id: string;
+  name: string;
+  language: string;
+  visibility: TVisibility;
+  createdAt: string;
+  updatedAt: string;
+};
