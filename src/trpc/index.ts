@@ -290,6 +290,7 @@ export const appRouter = router({
           NOT: {
             userId,
           },
+          visibility: "public",
           ...(language && language !== "all" ? { language } : {}),
         },
         orderBy: {
