@@ -1,6 +1,9 @@
 import { INFINITE_QUERY_LIMIT } from "@/constants";
 import { db } from "@/db";
-import { SnippetValidation, UpdateSnippetValidation } from "@/lib/validations/snippet";
+import {
+  SnippetValidation,
+  UpdateSnippetValidation,
+} from "@/lib/validations/snippet";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -131,13 +134,21 @@ export const appRouter = router({
 
       if (!snippet) throw new TRPCError({ code: "NOT_FOUND" });
 
-      await db.snippet.delete({
+      // delete all related saved entries
+      await db.savedSnippet.deleteMany({
         where: {
-          id: input.id,
+          snippetId: snippet.id
+        }
+      })
+
+      const deletedSnippet = await db.snippet.delete({
+        where: {
+          id: snippet.id,
         },
       });
 
-      return snippet;
+
+      return deletedSnippet;
     }),
   saveSnippet: privateProcedure
     .input(z.object({ snippetId: z.string() }))
@@ -276,7 +287,7 @@ export const appRouter = router({
       z.object({
         limit: z.number().min(1).max(100).nullish(),
         cursor: z.string().nullish(),
-        language: z.string().nullish()
+        language: z.string().nullish(),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -328,8 +339,7 @@ export const appRouter = router({
       if (!snippet || snippet?.userId !== userId)
         throw new TRPCError({ code: "FORBIDDEN" });
 
-      const { code, name, visibility } =
-      UpdateSnippetValidation.parse(data);
+      const { code, name, visibility } = UpdateSnippetValidation.parse(data);
 
       const updatedSnippet = await db.snippet.update({
         where: {

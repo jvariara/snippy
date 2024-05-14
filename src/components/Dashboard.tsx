@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { usePathname } from "next/navigation";
 
 interface DashboardProps {
   userId: string;
@@ -24,7 +25,9 @@ interface DashboardProps {
 
 const Dashboard = ({ userId }: DashboardProps) => {
   const [isMySnippets, setIsMySnippets] = useState<boolean>(true);
-  const { data, isLoading, fetchNextPage } =
+  const pathname = usePathname();
+
+  const { data, isLoading, fetchNextPage, refetch } =
     trpc.getUserSnippets.useInfiniteQuery(
       {
         id: userId,
@@ -36,6 +39,10 @@ const Dashboard = ({ userId }: DashboardProps) => {
         refetchOnMount: true,
       }
     );
+
+  // useEffect(() => {
+  //   refetch();
+  // }, [refetch, pathname]);
 
   const snippets = data?.pages.flatMap((page) => page.snippets);
   const lastSnippetRef = useRef<HTMLLIElement>(null);
@@ -68,7 +75,7 @@ const Dashboard = ({ userId }: DashboardProps) => {
     {
       getNextPageParam: (lastPage) => lastPage?.nextCursor,
       refetchOnMount: true,
-      refetchOnWindowFocus: true
+      refetchOnWindowFocus: true,
     }
   );
 
