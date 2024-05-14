@@ -9,6 +9,8 @@ export const SnippetValidation = z.object({
   language: z.enum([
     "javascript",
     "typescript",
+    "html",
+    "css",
     "python",
     "csharp",
     "java",
