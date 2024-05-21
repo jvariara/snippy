@@ -9,15 +9,16 @@ import {
 } from "@kinde-oss/kinde-auth-nextjs/components";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import MobileNav from "./MobileNav";
+import { ThemeSwitch } from "./theme/theme-switcher";
 
 const Navbar = async () => {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
   return (
-    <div className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
+    <div className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 dark:bg-black dark:border-black backdrop-blur-lg transition-all">
       <MaxWidthWrapper>
-        <div className="flex h-14 items-center justify-between border-b border-zinc-200">
+        <div className="flex h-14 items-center justify-between border-b border-zinc-200 dark:border-gray-900">
           {/* Logo */}
           <Link
             href="/"
@@ -28,6 +29,8 @@ const Navbar = async () => {
 
           {/* TODO: MobileNav */}
           <MobileNav isAuth={!!user} />
+
+          
 
           <div className="hidden items-center space-x-4 sm:flex">
             {!user ? (
@@ -81,6 +84,7 @@ const Navbar = async () => {
                 />
               </>
             )}
+            <ThemeSwitch />
           </div>
         </div>
       </MaxWidthWrapper>

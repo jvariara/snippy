@@ -6,13 +6,13 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <>
+    <div className="not">
       <MaxWidthWrapper className="">
         <div className="py-20 mx-auto text-center flex flex-col items-center max-w-3xl">
-          <div className="mx-auto mb-5 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200 bg-white px-7 py-2 shadow-md backdrop-blur transition-all hover:border-gray-300 hover:bg-red-100/30">
-            <p className="text-sm font-semibold text-primary">Snippy</p>
+          <div className="mx-auto mb-5 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200 dark:border-gray-800 bg-white dark:bg-black px-7 py-2 shadow-md backdrop-blur transition-all hover:border-gray-300 hover:bg-red-100/30">
+            <p className="text-sm font-semibold text-primary dark:text-zinc-200">Snippy</p>
           </div>
-          <h1 className="text-4xl font-semibold tracking-tight text-gray-700 sm:text-6xl">
+          <h1 className="text-4xl font-semibold tracking-tight text-gray-700 dark:text-gray-300 sm:text-6xl">
             Welcome to <span className="text-primary">Snippy</span> ✂
           </h1>
           <p className="text-lg max-w-prose font-medium text-muted-foreground mt-4">
@@ -35,6 +35,6 @@ export default function Home() {
           subtitle="Browse trending snippets"
         />
       </MaxWidthWrapper>
-    </>
+    </div>
   );
 }

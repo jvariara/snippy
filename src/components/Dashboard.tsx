@@ -96,9 +96,9 @@ const Dashboard = ({ userId }: DashboardProps) => {
 
   return (
     <MaxWidthWrapper className="max-w-7xl md:p-10">
-      <div className="mt-8 flex flex-col items-start justify-between gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-center sm:gap-0">
+      <div className="mt-8 flex flex-col items-start justify-between gap-4 border-b border-primary pb-5 sm:flex-row sm:items-center sm:gap-0">
         <Select defaultValue="my-snippets" onValueChange={(e) => onSelect(e)}>
-          <SelectTrigger className="w-fit text-3xl md:text-5xl py-8 pl-0 bg-inherit border-none">
+          <SelectTrigger className="w-fit text-3xl md:text-5xl py-8 pl-0 bg-inherit border-none text-primary">
             <SelectValue placeholder="Select viewing option" />
           </SelectTrigger>
           <SelectContent>
@@ -120,7 +120,7 @@ const Dashboard = ({ userId }: DashboardProps) => {
       {isMySnippets ? (
         <>
           {snippets && snippets?.length > 0 ? (
-            <ul className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 divide-y divide-zinc-200">
+            <ul className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {snippets.map((snippet, i) => {
                 if (i === snippets.length - 1) {
                   return (
@@ -152,7 +152,7 @@ const Dashboard = ({ userId }: DashboardProps) => {
             </div>
           ) : (
             <div className="mt-16 flex flex-col items-center gap-2">
-              <Ghost className="h-8 w-8 text-zinc-800" />
+              <Ghost className="h-8 w-8 text-zinc-800 dark:text-zinc-200" />
               <h3 className="font-semibold text-xl">
                 Pretty empty around here
               </h3>
@@ -166,7 +166,7 @@ const Dashboard = ({ userId }: DashboardProps) => {
       ) : (
         <>
           {savedSnippets && savedSnippets?.length > 0 ? (
-            <ul className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 divide-y divide-zinc-200">
+            <ul className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {savedSnippets.map((snippet, i) => {
                 if (i === savedSnippets.length - 1) {
                   return (
@@ -196,7 +196,7 @@ const Dashboard = ({ userId }: DashboardProps) => {
             </div>
           ) : (
             <div className="mt-16 flex flex-col items-center gap-2">
-              <Ghost className="h-8 w-8 text-zinc-800" />
+              <Ghost className="h-8 w-8 text-zinc-800 dark:text-zinc-200" />
               <h3 className="font-semibold text-xl">
                 Pretty empty around here
               </h3>

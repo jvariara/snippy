@@ -1,5 +1,6 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
+import { LANGUAGES } from "@/constants";
 import { formatSaveCount } from "@/lib/utils";
 import { TVisibility } from "@/lib/validations/snippet";
 import { format } from "date-fns";
@@ -15,11 +16,10 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { forwardRef } from "react";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { Button } from "./ui/button";
-import { LANGUAGES } from "@/constants";
-import { forwardRef } from "react";
-import { redirect, useRouter } from "next/navigation";
 
 interface SnippetProps {
   creator: {
@@ -61,7 +61,7 @@ const SnippetListing = forwardRef<HTMLLIElement, SnippetProps>(
     return (
       <li
         ref={ref}
-        className="relative col-span-1 divide-y divide-gray-200 w-full rounded-lg bg-white shadow transition hover:shadow-lg"
+        className="relative col-span-1 divide-y divide-primary w-full rounded-lg bg-white dark:bg-black transition shadow-lg border border-primary"
       >
         {origin === "dashboard" ? (
           <Settings
@@ -95,7 +95,7 @@ const SnippetListing = forwardRef<HTMLLIElement, SnippetProps>(
 
             <div className="flex-1 truncate">
               <div className="flex flex-col items-center sm:items-start justify-start ">
-                <h3 className="text-md md:text-lg font-medium text-zinc-900">
+                <h3 className="text-md md:text-lg font-medium text-zinc-900 dark:text-zinc-100">
                   {snippet.name}
                 </h3>
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">

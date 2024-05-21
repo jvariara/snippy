@@ -1,18 +1,25 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
 import { Highlight, themes } from "prism-react-renderer";
 
 const Code = ({ code }: { code: string }) => {
+  const { theme } = useTheme();
+
+  //themes.oceanicNext
+
   return (
-    <Highlight theme={themes.oceanicNext} code={code} language="tsx">
+    <Highlight theme={theme === "dark" ? themes.oneDark : themes.oneLight} code={code} language="tsx">
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre style={style} className={cn(className)}>
           {tokens.map((line, i) => {
             const { key, ...rest } = getLineProps({ line, key: i });
             return (
               <div key={i} style={{ position: "relative" }} {...rest}>
-                <span className="text-zinc-500 select-none pr-8 pl-2 ">{i + 1}</span>
+                <span className="text-zinc-500 select-none pr-8 pl-2 ">
+                  {i + 1}
+                </span>
                 {line.map((token, key) => (
                   <span key={key} {...getTokenProps({ token })} />
                 ))}

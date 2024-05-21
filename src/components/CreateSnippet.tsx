@@ -29,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { useTheme } from "next-themes";
 
 const CreateSnippet = ({ userId }: { userId: string }) => {
   const [code, setCode] = useState<string | undefined>(
@@ -37,6 +38,7 @@ const CreateSnippet = ({ userId }: { userId: string }) => {
   const [currLanguage, setCurrLanguage] = useState("javascript");
   const editorRef = useRef();
   const router = useRouter();
+  const { theme } = useTheme()
 
   const form = useForm({
     resolver: zodResolver(SnippetValidation),
@@ -175,13 +177,14 @@ const CreateSnippet = ({ userId }: { userId: string }) => {
               {isPending ? "Saving..." : "Save"}
             </Button>
           </div>
-          <div className="p-2 rounded-xl ring-1 ring-inset bg-gray-900/5 ring-gray-900/10 lg:rounded-2xl mt-4 lg:p-4">
+          <div className="p-2 rounded-xl ring-1 ring-inset bg-gray-900/5 ring-gray-900/10 dark:bg-black/30 dark:ring-black lg:rounded-2xl mt-4 lg:p-4">
             <FormField
               control={form.control}
               name="code"
               render={({ field }) => (
                 <Editor
                   height="75vh"
+                  theme={theme === "dark" ? "vs-dark" : "light"}
                   language={currLanguage}
                   defaultValue={CODE_SNIPPETS["javascript"]}
                   value={code}

@@ -34,6 +34,7 @@ import {
 import { Skeleton } from "./ui/skeleton";
 import { Label } from "./ui/label";
 import { LANGUAGES } from "@/constants";
+import { useTheme } from "next-themes";
 
 interface EditSnippetProps {
   loggedInUserId: string;
@@ -46,6 +47,7 @@ const EditSnippet = ({ loggedInUserId, snippetId }: EditSnippetProps) => {
   const [code, setCode] = useState<string | undefined>("");
   const editorRef = useRef();
   const router = useRouter();
+  const { theme } = useTheme()
 
   const { data, isLoading } = trpc.getSnippet.useQuery({
     id: snippetId,
@@ -185,9 +187,10 @@ const EditSnippet = ({ loggedInUserId, snippetId }: EditSnippetProps) => {
               {isPending ? "Saving..." : "Save"}
             </Button>
           </div>
-          <div className="p-2 rounded-xl ring-1 ring-inset bg-gray-900/5 ring-gray-900/10 lg:rounded-2xl mt-4 lg:p-4">
+          <div className="p-2 rounded-xl ring-1 ring-inset bg-gray-900/5 ring-gray-900/10 dark:bg-black/30 dark:ring-black lg:rounded-2xl mt-4 lg:p-4">
             <Editor
               height="75vh"
+              theme={theme === "dark" ? "vs-dark" : "light"}
               language={snippet.language}
               defaultValue={code}
               value={code}

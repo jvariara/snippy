@@ -77,7 +77,7 @@ const SnippetDetails = ({ snippetId, loggedInUserId }: SnippetDetailsProps) => {
                 ) : (
                   <AvatarFallback className="bg-primary">
                     <span className="sr-only">{snippet.user.name}</span>
-                    <span className="text-white">
+                    <span className="text-white dark:text-black">
                       {snippet.user.name
                         ? snippet.user.name.split("")[0].toUpperCase()
                         : null}
@@ -86,7 +86,7 @@ const SnippetDetails = ({ snippetId, loggedInUserId }: SnippetDetailsProps) => {
                 )}
               </Avatar>
             </div>
-            <h1 className="font-bold text-zinc-800 text-xl sm:text-4xl">
+            <h1 className="font-bold text-zinc-800 text-xl sm:text-4xl dark:text-zinc-200">
               {snippet.name}
             </h1>
             <h3 className="text-muted-foreground text-lg sm:text-2xl">
@@ -121,7 +121,7 @@ const SnippetDetails = ({ snippetId, loggedInUserId }: SnippetDetailsProps) => {
               variant="outline"
               onClick={() => {
                 navigator.clipboard.writeText(snippet.code);
-                toast("Code successfully saved to clipboard!")
+                toast.success("Code successfully saved to clipboard!")
               }}
             >
               Copy Code
@@ -138,20 +138,20 @@ const SnippetPlaceholder = () => {
     <div className="max-w-6xl w-full mx-auto gap-6 pb-24 sm:pb-32 lg:gap-x-8 lg:px-8 lg:py-20">
       <div className="w-full flex items-start flex-col-reverse lg:flex-row gap-x-6 gap-y-4 mt-12 px-4">
         {/* code section */}
-        <Skeleton className="h-80 w-2/3 bg-zinc-300" />
+        <Skeleton className="h-80 w-2/3 bg-zinc-300 dark:bg-zinc-800" />
 
         <div className="flex flex-col gap-y-4 w-1/3">
           {/* creator name */}
-          <Skeleton className="h-8 w-3/4 bg-zinc-300" />
+          <Skeleton className="h-8 w-3/4 bg-zinc-300 dark:bg-zinc-800" />
           {/* snippet name */}
-          <Skeleton className="h-12 w-full bg-zinc-300" />
+          <Skeleton className="h-12 w-full bg-zinc-300 dark:bg-zinc-800" />
           {/* snippet language */}
-          <Skeleton className="h-10 w-1/2 bg-zinc-300" />
+          <Skeleton className="h-10 w-1/2 bg-zinc-300 dark:bg-zinc-800" />
 
           <div className="flex items-center gap-6">
             {/* snippet saved count and date */}
-            <Skeleton className="h-8 w-1/2 bg-zinc-300" />
-            <Skeleton className="h-8 w-1/2 bg-zinc-300" />
+            <Skeleton className="h-8 w-1/2 bg-zinc-300 dark:bg-zinc-800" />
+            <Skeleton className="h-8 w-1/2 bg-zinc-300 dark:bg-zinc-800" />
           </div>
         </div>
       </div>

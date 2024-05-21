@@ -25,7 +25,7 @@ const UserAccountNav = async ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="overflow-visible">
-        <Button className="rounded-full h-8 w-8 aspect-square bg-slate-400">
+        <Button className="rounded-full h-8 w-8 aspect-square bg-slate-400 dark:bg-slate-950">
           <Avatar className="relative w-10 h-10 border-2 border-primary">
             {imageUrl ? (
               <div className="relative aspect-square h-full w-full">
@@ -39,7 +39,7 @@ const UserAccountNav = async ({
             ) : (
               <AvatarFallback className="bg-primary">
                 <span className="sr-only">{name}</span>
-                <span className="text-white">
+                <span className="text-white dark:text-black">
                   {name
                     ? name.split("")[0].toUpperCase()
                     : email
@@ -52,12 +52,12 @@ const UserAccountNav = async ({
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="bg-white" align="end">
+      <DropdownMenuContent className="bg-white dark:bg-black" align="end">
         <div className="flex items-center justify-start gap-2 p-2">
           <div className="flex flex-col space-y-0.5 leading-none">
-            {name && <p className="font-medium text-sm text-black">{name}</p>}
+            {name && <p className="font-medium text-sm text-black dark:text-gray-100">{name}</p>}
             {email && (
-              <p className="w-[200px] truncate text-xs text-zinc-700">
+              <p className="w-[200px] truncate text-xs text-zinc-700 dark:text-zinc-400">
                 {email}
               </p>
             )}

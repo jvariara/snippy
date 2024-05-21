@@ -59,8 +59,8 @@ const SnippetsFeed = () => {
 
   return (
     <MaxWidthWrapper className="max-w-7xl md:p-10">
-      <div className="mt-8 flex items-start justify-between gap-4 border-b border-gray-200 pb-5 flex-row sm:items-center sm:gap-0">
-        <h1 className="mb-3 font-bold text-3xl md:text-5xl text-gray-900">
+      <div className="mt-8 flex items-start justify-between gap-4 border-b border-primary pb-5 flex-row sm:items-center sm:gap-0">
+        <h1 className="mb-3 font-bold text-3xl md:text-5xl text-primary">
           Feed
         </h1>
         {/* TODO: search bar */}
@@ -94,7 +94,7 @@ const SnippetsFeed = () => {
       </div>
 
       {snippets && snippets?.length > 0 ? (
-        <ul className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 divide-y divide-zinc-200">
+        <ul className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3  dark:border-zinc-800">
           {snippets.map((snippet, i) => {
             if (i === snippets.length - 1) {
               return (
@@ -124,7 +124,7 @@ const SnippetsFeed = () => {
         </div>
       ) : (
         <div className="mt-16 flex flex-col items-center gap-2">
-          <Ghost className="h-8 w-8 text-zinc-800" />
+          <Ghost className="h-8 w-8 text-zinc-800 dark:text-zinc-200" />
           <h3 className="font-semibold text-xl">Pretty empty around here</h3>
           <p>No snippets have been created yet by other users.</p>
         </div>
