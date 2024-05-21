@@ -52,7 +52,7 @@ export const appRouter = router({
 
       if (!dbUser) throw new TRPCError({ code: "UNAUTHORIZED" });
 
-      const { code, language, name, visibility } =
+      const { code, language, name, visibility, description } =
         SnippetValidation.parse(input);
 
       const snippet = await db.snippet.create({
@@ -61,6 +61,7 @@ export const appRouter = router({
           language,
           userId: userId,
           name,
+          description,
           visibility,
         },
       });
@@ -339,7 +340,7 @@ export const appRouter = router({
       if (!snippet || snippet?.userId !== userId)
         throw new TRPCError({ code: "FORBIDDEN" });
 
-      const { code, name, visibility } = UpdateSnippetValidation.parse(data);
+      const { code, name, visibility, description } = UpdateSnippetValidation.parse(data);
 
       const updatedSnippet = await db.snippet.update({
         where: {
@@ -349,6 +350,7 @@ export const appRouter = router({
           code,
           name,
           visibility,
+          description
         },
       });
 

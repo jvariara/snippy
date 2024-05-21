@@ -94,6 +94,8 @@ const SnippetDetails = ({ snippetId, loggedInUserId }: SnippetDetailsProps) => {
               {LANGUAGES[snippet.language]}
             </h3>
 
+            {snippet.description ? <p className="text-muted-foreground md:text-lg">{snippet.description}</p> : null}
+
             <div className="flex items-center gap-6 text-sm sm:text-lg text-muted-foreground">
               <div className="flex items-center gap-2">
                 {isSaved ? (
@@ -121,7 +123,7 @@ const SnippetDetails = ({ snippetId, loggedInUserId }: SnippetDetailsProps) => {
               variant="outline"
               onClick={() => {
                 navigator.clipboard.writeText(snippet.code);
-                toast.success("Code successfully saved to clipboard!")
+                toast.success("Code successfully saved to clipboard!");
               }}
             >
               Copy Code

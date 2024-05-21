@@ -23,10 +23,12 @@ enum SnippetVisibility {
 }
 
 model Snippet {
-  id         String            @id @default(cuid())
-  code       String
-  language   String
-  name       String
+  id          String  @id @default(cuid())
+  code        String
+  language    String
+  name        String
+  description String?
+
   visibility SnippetVisibility @default(public)
 
   user   User   @relation(fields: [userId], references: [id])

@@ -30,6 +30,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { useTheme } from "next-themes";
+import { Textarea } from "./ui/textarea";
 
 const CreateSnippet = ({ userId }: { userId: string }) => {
   const [code, setCode] = useState<string | undefined>(
@@ -38,7 +39,7 @@ const CreateSnippet = ({ userId }: { userId: string }) => {
   const [currLanguage, setCurrLanguage] = useState("javascript");
   const editorRef = useRef();
   const router = useRouter();
-  const { theme } = useTheme()
+  const { theme } = useTheme();
 
   const form = useForm({
     resolver: zodResolver(SnippetValidation),
@@ -47,6 +48,7 @@ const CreateSnippet = ({ userId }: { userId: string }) => {
       userId: userId,
       language: "javascript" as TLanguages,
       name: "",
+      description: "",
       visibility: "public" as TVisibility,
     },
   });
@@ -94,74 +96,97 @@ const CreateSnippet = ({ userId }: { userId: string }) => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-col sm:flex-row sm:justify-between gap-y-3 sm:gap-y-0 items-end">
-            <div className="flex gap-x-2 sm:gap-x-4 w-full">
+            <div className="flex flex-col gap-y-2 w-full">
+              <div className="flex gap-x-2 sm:gap-x-4 w-full">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem className="w-1/2 sm:w-[200px]">
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="language"
+                  render={({ field }) => (
+                    <FormItem className="w-1/2 sm:w-[200px]">
+                      <FormLabel>Language</FormLabel>
+                      <Select
+                        defaultValue="javascript"
+                        onValueChange={(e) => {
+                          onSelect(e);
+                          field.onChange(e);
+                        }}
+                      >
+                        <SelectTrigger className="w-full sm:w-[200px]">
+                          <SelectValue placeholder="Select a language" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Languages</SelectLabel>
+                            <SelectItem value="javascript">
+                              JavaScript
+                            </SelectItem>
+                            <SelectItem value="typescript">
+                              TypeScript
+                            </SelectItem>
+                            <SelectItem value="html">HTML</SelectItem>
+                            <SelectItem value="css">CSS</SelectItem>
+                            <SelectItem value="python">Python</SelectItem>
+                            <SelectItem value="csharp">C#</SelectItem>
+                            <SelectItem value="java">Java</SelectItem>
+                            <SelectItem value="php">PHP</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="visibility"
+                  render={({ field }) => (
+                    <FormItem className="w-1/2 sm:w-[200px]">
+                      <FormLabel>Visibility</FormLabel>
+                      <Select
+                        defaultValue="public"
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger className="w-full sm:w-[200px]">
+                          <SelectValue placeholder="Select a language" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Visibility</SelectLabel>
+                            <SelectItem value="public">Public</SelectItem>
+                            <SelectItem value="private">Private</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <FormField
                 control={form.control}
-                name="name"
+                name="description"
                 render={({ field }) => (
-                  <FormItem className="w-1/2 sm:w-[200px]">
-                    <FormLabel>Name</FormLabel>
+                  <FormItem className="w-full sm:w-[630px]">
+                    <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Input placeholder="Name" {...field} />
+                      <Textarea
+                        placeholder="Add a description about your snippet"
+                        className="resize-none"
+                        {...field}
+                      />
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="language"
-                render={({ field }) => (
-                  <FormItem className="w-1/2 sm:w-[200px]">
-                    <FormLabel>Language</FormLabel>
-                    <Select
-                      defaultValue="javascript"
-                      onValueChange={(e) => {
-                        onSelect(e);
-                        field.onChange(e);
-                      }}
-                    >
-                      <SelectTrigger className="w-full sm:w-[200px]">
-                        <SelectValue placeholder="Select a language" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Languages</SelectLabel>
-                          <SelectItem value="javascript">JavaScript</SelectItem>
-                          <SelectItem value="typescript">TypeScript</SelectItem>
-                          <SelectItem value="html">HTML</SelectItem>
-                          <SelectItem value="css">CSS</SelectItem>
-                          <SelectItem value="python">Python</SelectItem>
-                          <SelectItem value="csharp">C#</SelectItem>
-                          <SelectItem value="java">Java</SelectItem>
-                          <SelectItem value="php">PHP</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="visibility"
-                render={({ field }) => (
-                  <FormItem className="w-1/2 sm:w-[200px]">
-                    <FormLabel>Visibility</FormLabel>
-                    <Select
-                      defaultValue="public"
-                      onValueChange={field.onChange}
-                    >
-                      <SelectTrigger className="w-full sm:w-[200px]">
-                        <SelectValue placeholder="Select a language" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Visibility</SelectLabel>
-                          <SelectItem value="public">Public</SelectItem>
-                          <SelectItem value="private">Private</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
                   </FormItem>
                 )}
               />
@@ -183,7 +208,7 @@ const CreateSnippet = ({ userId }: { userId: string }) => {
               name="code"
               render={({ field }) => (
                 <Editor
-                  height="75vh"
+                  height="60vh"
                   theme={theme === "dark" ? "vs-dark" : "light"}
                   language={currLanguage}
                   defaultValue={CODE_SNIPPETS["javascript"]}

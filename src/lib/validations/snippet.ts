@@ -6,6 +6,10 @@ export const SnippetValidation = z.object({
     .string()
     .min(3, { message: "Minimum 3 characters" })
     .max(25, { message: "Maximum 25 characters" }),
+  description: z
+    .string()
+    .max(150, { message: "Maximum 150 characters" })
+    .optional(),
   language: z.enum([
     "javascript",
     "typescript",
@@ -26,6 +30,10 @@ export const UpdateSnippetValidation = z.object({
     .string()
     .min(3, { message: "Minimum 3 characters" })
     .max(25, { message: "Maximum 25 characters" }),
+  description: z
+    .string()
+    .max(100, { message: "Maximum 100 characters" })
+    .optional(),
   visibility: z.enum(["public", "private"]),
 });
 
