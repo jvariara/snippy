@@ -98,13 +98,13 @@ const SnippetDetails = ({ snippetId, loggedInUserId }: SnippetDetailsProps) => {
               <div className="flex items-center gap-2">
                 {isSaved ? (
                   <Heart
-                    className="h-6 w-6 hover:cursor-pointer text-red-500"
+                    className="h-6 w-6 hover:cursor-pointer text-red-600"
                     onClick={() => saveSnippet({ snippetId: snippet.id })}
                     fill="red"
                   />
                 ) : (
                   <Heart
-                    className="h-6 w-6 hover:cursor-pointer hover:text-red-500"
+                    className="h-6 w-6 hover:cursor-pointer hover:text-red-600"
                     onClick={() => saveSnippet({ snippetId: snippet.id })}
                   />
                 )}

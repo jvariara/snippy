@@ -58,6 +58,17 @@ const SnippetListing = forwardRef<HTMLLIElement, SnippetProps>(
       snippetId: snippet.id,
     });
 
+    const { data: isSnippetSaved } = trpc.isSnippetSaved.useQuery({
+      snippetId: snippet.id,
+    });
+
+    const { mutate: saveSnippet } = trpc.saveSnippet.useMutation({
+      onSuccess: () => {
+        utils.getSnippetSaveCount.invalidate();
+        utils.isSnippetSaved.invalidate();
+      },
+    });
+
     return (
       <li
         ref={ref}
@@ -110,7 +121,18 @@ const SnippetListing = forwardRef<HTMLLIElement, SnippetProps>(
 
         <div className="px-6 flex items-center justify-center md:justify-start py-4 gap-6 text-xs sm:text-sm text-zinc-500">
           <div className="flex items-center gap-2">
-            <Heart className="h-4 w-4" />
+            {isSnippetSaved ? (
+              <Heart
+                className="h-4 w-4 text-red-600 cursor-pointer"
+                fill="red"
+                onClick={() => saveSnippet({ snippetId: snippet.id })}
+              />
+            ) : (
+              <Heart
+                className="h-4 w-4 cursor-pointer"
+                onClick={() => saveSnippet({ snippetId: snippet.id })}
+              />
+            )}
             {formatSaveCount(snippetSaveCount)}
           </div>
           <div className="flex items-center gap-2 whitespace-nowrap w-fit">
