@@ -98,7 +98,7 @@ const Dashboard = ({ userId }: DashboardProps) => {
     <MaxWidthWrapper className="max-w-7xl md:p-10">
       <div className="mt-8 flex flex-col items-start justify-between gap-4 border-b border-primary pb-5 sm:flex-row sm:items-center sm:gap-0">
         <Select defaultValue="my-snippets" onValueChange={(e) => onSelect(e)}>
-          <SelectTrigger className="w-fit text-3xl md:text-5xl py-8 pl-0 bg-inherit border-none text-primary">
+          <SelectTrigger className="w-fit text-3xl md:text-5xl py-8 pl-0 bg-inherit border-none text-foreground font-semibold">
             <SelectValue placeholder="Select viewing option" />
           </SelectTrigger>
           <SelectContent>

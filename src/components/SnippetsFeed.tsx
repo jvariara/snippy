@@ -60,7 +60,7 @@ const SnippetsFeed = () => {
   return (
     <MaxWidthWrapper className="max-w-7xl md:p-10">
       <div className="mt-8 flex items-start justify-between gap-4 border-b border-primary pb-5 flex-row sm:items-center sm:gap-0">
-        <h1 className="mb-3 font-bold text-3xl md:text-5xl text-primary">
+        <h1 className="mb-3 font-semibold text-3xl md:text-5xl text-foreground">
           Feed
         </h1>
         {/* TODO: search bar */}
