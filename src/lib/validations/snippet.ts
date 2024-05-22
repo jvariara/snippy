@@ -32,7 +32,7 @@ export const UpdateSnippetValidation = z.object({
     .max(25, { message: "Maximum 25 characters" }),
   description: z
     .string()
-    .max(100, { message: "Maximum 100 characters" })
+    .max(150, { message: "Maximum 150 characters" })
     .optional(),
   visibility: z.enum(["public", "private"]),
 });

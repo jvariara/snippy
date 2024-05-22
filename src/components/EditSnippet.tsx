@@ -141,8 +141,6 @@ const EditSnippet = ({ loggedInUserId, snippetId }: EditSnippetProps) => {
           }
         });
 
-        console.log(errObject);
-
         setErrors(errObject);
       }
     }
